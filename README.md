@@ -4,11 +4,11 @@ Web-based admin dashboard for managing The Stitch Tracker app.
 
 ## Features
 
-- 🔐 Secure admin login (requires "admin" customer tag)
-- 📢 Announcements management (create, edit, delete, toggle)
-- 🎯 User targeting (all users or specific tags)
-- 📅 Scheduled announcements (start/end dates)
-- 🎨 Clean, responsive Material-UI interface
+- Secure admin login (requires "admin" customer tag)
+- Announcements management (create, edit, delete, toggle)
+- User targeting (all users or specific tags)
+- Scheduled announcements (start/end dates)
+- Clean, responsive Material-UI interface
 
 ## Tech Stack
 
@@ -95,7 +95,7 @@ Built files will be in the `dist/` folder. Deploy to any static hosting:
 
 ### Option 1: Shopify (Recommended)
 
-1. Go to Shopify admin → Customers
+1. Go to Shopify admin -> Customers
 2. Find your user
 3. Add tag: `admin`
 4. Wait for webhook sync
