@@ -3,6 +3,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import LoginPage from './pages/LoginPage';
 import AnnouncementsPage from './pages/AnnouncementsPage';
+import AccessRulesPage from './pages/AccessRulesPage';
 import Layout from './components/Layout';
 import { useState, useEffect } from 'react';
 
@@ -29,7 +30,11 @@ function App() {
                 <Routes>
                     <Route
                         path="/login"
-                        element={<LoginPage onLogin={() => setIsAuthenticated(true)} />}
+                        element={
+                            isAuthenticated
+                                ? <Navigate to="/announcements" replace />
+                                : <LoginPage onLogin={() => setIsAuthenticated(true)} />
+                        }
                     />
 
                     {/* Protected layout — all dashboard pages live inside here */}
@@ -43,6 +48,7 @@ function App() {
                         }
                     >
                         <Route path="/announcements" element={<AnnouncementsPage />} />
+                        <Route path="/access-rules" element={<AccessRulesPage />} />
                         {/* Future routes go here, e.g.: */}
                         {/* <Route path="/users" element={<UsersPage />} /> */}
                     </Route>

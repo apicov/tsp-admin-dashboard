@@ -21,6 +21,7 @@ import {
     ChevronLeft as ChevronLeftIcon,
     Campaign as AnnouncementsIcon,
     Logout as LogoutIcon,
+    Security as SecurityIcon,
 } from '@mui/icons-material';
 import { config } from '../config';
 
@@ -36,6 +37,11 @@ const NAV_ITEMS = [
         label: 'Announcements',
         path: '/announcements',
         icon: <AnnouncementsIcon />,
+    },
+    {
+        label: 'Access Rules',
+        path: '/access-rules',
+        icon: <SecurityIcon />,
     },
     // Future sections can be added here, e.g.:
     // { label: 'Users', path: '/users', icon: <PeopleIcon /> },
