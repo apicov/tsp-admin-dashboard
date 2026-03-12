@@ -52,6 +52,7 @@ const emptyRule: AccessRuleCreate = {
         {
             pattern_label_name: '',
             grant_all_labels: false,
+            is_exclusion: false,
         }
     ],
 };
@@ -191,6 +192,7 @@ export default function AccessRulesPage() {
                 {
                     pattern_label_name: '',
                     grant_all_labels: false,
+                    is_exclusion: false,
                 }
             ]
         });
@@ -230,13 +232,31 @@ export default function AccessRulesPage() {
 
     // Format grants for display
     function formatGrants(rule: AccessRule): string {
-        if (rule.pattern_grants.some(g => g.grant_all_labels)) {
-            return 'ALL Patterns';
+        const grants = rule.pattern_grants.filter(g => !g.is_exclusion);
+        const exclusions = rule.pattern_grants.filter(g => g.is_exclusion);
+
+        let result = '';
+
+        if (grants.some(g => g.grant_all_labels)) {
+            result = 'ALL Patterns';
+        } else if (grants.some(g => g.pattern_label_name === '*')) {
+            result = '* (ALL)';
+        } else {
+            result = grants
+                .map(g => g.pattern_label_name)
+                .filter(Boolean)
+                .join(', ') || 'None';
         }
-        return rule.pattern_grants
-            .map(g => g.pattern_label_name)
-            .filter(Boolean)
-            .join(', ');
+
+        if (exclusions.length > 0) {
+            const excludedLabels = exclusions
+                .map(g => g.pattern_label_name)
+                .filter(Boolean)
+                .join(', ');
+            result += ` EXCEPT ${excludedLabels}`;
+        }
+
+        return result;
     }
 
     // ─── Render ────────────────────────────────────────────────────────────────
@@ -475,6 +495,9 @@ export default function AccessRulesPage() {
                         <Typography variant="h6" gutterBottom>
                             Pattern Grants (What can users access?)
                         </Typography>
+                        <Alert severity="info" sx={{ mb: 2 }}>
+                            Use 'Exclusion' to DENY access to specific labels. Use wildcard label '*' to grant all patterns.
+                        </Alert>
                         {formData.pattern_grants.map((grant, index) => (
                             <Card key={index} variant="outlined" sx={{ mb: 2, p: 2 }}>
                                 <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
@@ -485,7 +508,7 @@ export default function AccessRulesPage() {
                                         disabled={grant.grant_all_labels}
                                         fullWidth
                                         size="small"
-                                        placeholder="e.g., Free, Premium"
+                                        placeholder="e.g., Free, Premium, * (for all)"
                                     />
                                     <FormControlLabel
                                         control={
@@ -500,6 +523,16 @@ export default function AccessRulesPage() {
                                             />
                                         }
                                         label="All Labels"
+                                    />
+                                    <FormControlLabel
+                                        control={
+                                            <Switch
+                                                checked={grant.is_exclusion || false}
+                                                onChange={e => updateGrant(index, 'is_exclusion', e.target.checked)}
+                                                color="error"
+                                            />
+                                        }
+                                        label="Exclusion"
                                     />
                                     <IconButton
                                         onClick={() => removeGrant(index)}

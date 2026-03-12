@@ -14,6 +14,7 @@ export interface PatternGrant {
     id: number;
     pattern_label_name: string | null;
     grant_all_labels: boolean;
+    is_exclusion: boolean;
 }
 
 export interface AccessRule {
@@ -37,6 +38,7 @@ export interface UserConditionCreate {
 export interface PatternGrantCreate {
     pattern_label_name?: string | null;
     grant_all_labels: boolean;
+    is_exclusion?: boolean;
 }
 
 export interface AccessRuleCreate {
